@@ -10,7 +10,7 @@ pipeline {
                 echo "BUILD STAGE"
                 echo "Compilando aplicación..."
                 sleep 2
-                echo "Build OK "
+                echo "Build OK"
                 '''
             }
         }
@@ -25,7 +25,7 @@ pipeline {
                         echo "TEST BACKEND"
                         echo "Ejecutando tests backend..."
                         sleep 2
-                        echo "Backend OK "
+                        echo "Backend OK"
                         '''
                     }
                 }
@@ -37,10 +37,17 @@ pipeline {
                         echo "TEST FRONTEND"
                         echo "Ejecutando tests frontend..."
                         sleep 2
-                        echo "Frontend OK "
+                        echo "Frontend OK"
                         '''
                     }
                 }
+            }
+        }
+
+        // NUEVA PAUSA
+        stage('Aprobación') {
+            steps {
+                input message: '¿Desea continuar con el Deploy?'
             }
         }
 
@@ -51,7 +58,7 @@ pipeline {
                 echo "DEPLOY"
                 echo "Desplegando aplicación..."
                 sleep 2
-                echo "Deploy OK 🚀"
+                echo "Deploy OK"
                 '''
             }
         }
@@ -63,7 +70,7 @@ pipeline {
                 echo "SMOKE TEST"
                 echo "Verificando servicio..."
 
-                curl -f http://192.168.1.122:8080 || echo "Simulación OK (servicio no disponible en demo) "
+                curl -f http://192.168.1.122:8080 || echo "Simulación OK (servicio no disponible en demo)"
 
                 echo "Pipeline continúa correctamente"
                 '''
