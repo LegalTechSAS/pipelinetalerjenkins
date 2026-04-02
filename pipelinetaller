@@ -86,4 +86,13 @@ pipeline {
             echo 'Pipeline falló, revisar artefacto'
         }
     }
+
+    post {
+        success {
+            echo 'Pipeline finalizado correctamente'
+        }
+        failure {
+            echo 'Pipeline falló'
+        }
+    }
 }
