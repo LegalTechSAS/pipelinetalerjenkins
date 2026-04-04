@@ -3,9 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Mi App Web</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 40px;
+            background-color: #f4f4f4;
+        }
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background-color: #003478;
+            padding: 12px 24px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .logo-text {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        .logo-sub {
+            color: #7EC8E3;
+            font-size: 12px;
+            letter-spacing: 1px;
+            display: block;
+            text-align: left;
+        }
+        .logo-bar {
+            width: 4px;
+            height: 50px;
+            background-color: #00A859;
+            border-radius: 2px;
+        }
+        h1 { color: #003478; }
+        p  { color: #555; }
+    </style>
 </head>
 <body>
+
+    <div class="logo">
+        <div class="logo-bar"></div>
+        <div>
+            <span class="logo-text">UTEC</span>
+            <span class="logo-sub">Universidad Tecnológica del Uruguay</span>
+        </div>
+    </div>
+
     <h1>¡¡¡Funciona el pipeline de Jenkins!!!</h1>
     <p>Desplegado con Docker desde Jenkins.</p>
+
 </body>
 </html>
