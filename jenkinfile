@@ -25,7 +25,7 @@ pipeline {
             }
         }
 
-        stage('Empaquetar Imagen') {
+        stage('Empaquetar Imagen ') {
             steps {
                 echo 'Convirtiendo imagen a archivo .tar para enviarla...'
                 sh "docker save ${mi_docker_de_prueba}:latest -o ${mi_docker_de_prueba}.tar"
