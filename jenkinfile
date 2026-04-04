@@ -1,0 +1,83 @@
+pipeline {
+    agent any
+
+    environment {
+        IMAGE_NAME = 'mi-app-web'
+        CONTAINER_NAME = 'mi-contenedor-web'
+        // ---> CAMBIA ESTAS VARIABLES POR LOS DATOS DE TU VM <---
+        VM_IP = '192.168.1.122' 
+        VM_USER = 'jenkins'
+        SSH_CREDS = 'ssh-vm-vmware' // El ID que pusiste en el paso 3
+    }
+
+    stages {
+        stage('Descargar código') {
+            steps {
+                git branch: 'main', url: 'https://github.com/TU_USUARIO/TU_REPOSITORIO.git'
+            }
+        }
+        
+        stage('Construir Imagen Docker') {
+            steps {
+                script {
+                    docker.build("${IMAGE_NAME}:latest")
+                }
+            }
+        }
+
+        stage('Empaquetar Imagen') {
+            steps {
+                echo 'Convirtiendo imagen a archivo .tar para enviarla...'
+                sh "docker save ${IMAGE_NAME}:latest -o ${IMAGE_NAME}.tar"
+            }
+        }
+        
+        stage('Enviar a VM de VMware') {
+            steps {
+                echo 'Enviando archivo por SSH a la VM...'
+                sshagent(credentials: ["${SSH_CREDS}"]) {
+                    // Usamos scp para enviar el archivo .tar al directorio /tmp de la VM
+                    sh "scp -o StrictHostKeyChecking=no ${IMAGE_NAME}.tar ${VM_USER}@${VM_IP}:/tmp/${IMAGE_NAME}.tar"
+                }
+            }
+        }
+
+        stage('Desplegar en VM de VMware') {
+            steps {
+                echo 'Levantando el contenedor en la VM remota...'
+                sshagent(credentials: ["${SSH_CREDS}"]) {
+                    // Usamos ssh para ejecutar comandos directamente en la VM
+                    sh """
+                    ssh -o StrictHostKeyChecking=no ${VM_USER}@${VM_IP} << 'EOF'
+                        echo "Deteniendo contenedor anterior..."
+                        docker stop ${CONTAINER_NAME} || true
+                        docker rm ${CONTAINER_NAME} || true
+                        
+                        echo "Cargando nueva imagen..."
+                        docker load -i /tmp/${IMAGE_NAME}.tar
+                        
+                        echo "Levantando nuevo contenedor..."
+                        docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
+                        
+                        echo "Limpiando archivo temporal..."
+                        rm /tmp/${IMAGE_NAME}.tar
+                    EOF
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Limpiando archivos temporales en Jenkins...'
+            sh "rm -f ${IMAGE_NAME}.tar"
+        }
+        success {
+            echo "¡Despliegue exitoso en la VM ${VM_IP}!"
+        }
+        failure {
+            echo 'El despliegue falló. Revisa los logs.'
+        }
+    }
+}
