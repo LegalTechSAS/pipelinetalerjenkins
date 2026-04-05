@@ -34,16 +34,16 @@ pipeline {
         }
         
         stage('Enviar a VM de VMware') {
-    steps {
-        echo 'Enviando archivo por SSH a la VM...'
-        sh "scp -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no ${IMAGE_NAME}.tar ${VM_USER}@${VM_IP}:/tmp/${IMAGE_NAME}.tar"
-    }
+            steps {
+                echo 'Enviando archivo por SSH a la VM...'
+                sh "scp -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no ${IMAGE_NAME}.tar ${VM_USER}@${VM_IP}:/tmp/${IMAGE_NAME}.tar"
+            }
         }
 }
 
-stage('Desplegar en VM de VMware') {
-    steps {
-        echo 'Levantando el contenedor en la VM remota...'
+        stage('Desplegar en VM de VMware') {
+            steps {
+               echo 'Levantando el contenedor en la VM remota...'
         sh """
             ssh -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no ${VM_USER}@${VM_IP} '
                 docker stop ${CONTAINER_NAME} || true
@@ -51,12 +51,12 @@ stage('Desplegar en VM de VMware') {
                 docker load -i /tmp/${IMAGE_NAME}.tar
                 docker run -d -p 80:80 --name ${CONTAINER_NAME} ${IMAGE_NAME}:latest
                 rm /tmp/${IMAGE_NAME}.tar
-            '
-        """
+                '
+            """
+                }
+            }
+        }
     }
-}
-}
-}
 
     post {
         always {
