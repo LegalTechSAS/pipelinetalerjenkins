@@ -7,7 +7,7 @@ pipeline {
         // ---> CAMBIA ESTAS VARIABLES POR LOS DATOS DE TU VM <---
         VM_IP = '192.168.1.122' 
         VM_USER = 'jenkins'
-        SSH_CREDS = 'githubacceso' // El ID que pusiste en el paso 3
+        SSH_CREDS = 'ssh-vm-vmware' // El ID que pusiste en el paso 3
     }
 
     stages {
