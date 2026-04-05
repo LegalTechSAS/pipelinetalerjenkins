@@ -38,6 +38,7 @@ pipeline {
         echo 'Enviando archivo por SSH a la VM...'
         sh "scp -i /var/lib/jenkins/.ssh/id_rsa -o StrictHostKeyChecking=no ${IMAGE_NAME}.tar ${VM_USER}@${VM_IP}:/tmp/${IMAGE_NAME}.tar"
     }
+        }
 }
 
 stage('Desplegar en VM de VMware') {
@@ -53,6 +54,8 @@ stage('Desplegar en VM de VMware') {
             '
         """
     }
+}
+}
 }
 
     post {
