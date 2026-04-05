@@ -30,6 +30,8 @@ pipeline {
             steps {
                 echo 'Convirtiendo imagen a archivo .tar para enviarla...'
                 sh "docker save ${IMAGE_NAME}:latest -o ${IMAGE_NAME}.tar"
+                // Esta línea nueva listará los archivos para que veamos si .tar se creó
+                sh "ls -lh ${IMAGE_NAME}.tar" 
             }
         }
         
