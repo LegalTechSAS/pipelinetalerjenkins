@@ -3,9 +3,9 @@ pipeline {
     environment {
         IMAGE_NAME     = 'mi-app-web'
         CONTAINER_NAME = 'mi-contenedor-web'
-        VM_IP          = '192.168.1.122' 
-        VM_USER        = 'jenkins'
-        SSH_KEY_PATH   = '/var/lib/jenkins/.ssh/id_rsa'
+        VM_IP          = '192.168.245.128' 
+        VM_USER        = 'devops'
+        SSH_KEY_PATH   = '/home/devops/.ssh/id_rsa'
     }
     stages {
         stage('Descargar código') {
